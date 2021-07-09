@@ -5,7 +5,7 @@ import empleado.Empleado;
 
 public class EmpleadoService {
     private Cache cache;
-    private static String CACHE_KEY = "empleado";
+    private static final String CACHE_KEY = "empleado";
 
     public EmpleadoService(Cache cache) {
         this.cache = cache;
