@@ -4,8 +4,6 @@ import empleado.Empleado;
 import empleado.service.EmpleadoService;
 import utils.SuperScanner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class ProgramaPrincipal {
@@ -28,7 +26,8 @@ public class ProgramaPrincipal {
             int option = requestOption();
             switch (option){
                 case SAVE_USER_OPTION: {
-                    requestEmpleado();
+                    Empleado empleado = new Empleado().capture(superScanner);
+                    empleadoService.saveEmpleadoInCache(empleado);
                     break;
                 }
                 case GET_USER_OPTION: {
@@ -40,6 +39,7 @@ public class ProgramaPrincipal {
                     break;
                 }
             }
+            System.out.println("=====================================");
         } while (isRunning);
     }
 
@@ -54,25 +54,6 @@ public class ProgramaPrincipal {
                 "Opcion: ",
                 "Opcion invalida",
                 SAVE_USER_OPTION, GET_USER_OPTION, STOP_PROGRAM_OPTION );
-    }
-
-    private void requestEmpleado(){
-        boolean stillRequesting;
-        do{
-            Empleado empleado = new Empleado();
-            empleado.setNombre(superScanner.nextLine("Nombre: "));
-            empleado.setApellidoPaterno(superScanner.nextLine("Apellido Paterno: "));
-            empleado.setApellidoMaterno(superScanner.nextLine("Apellido Materno: "));
-            empleado.setFechaDeNacimiento(superScanner.nextLine("Fecha de nacimiento: "));
-            System.out.println("Direccion------");
-            empleado.setDireccionesEmpleado(requestDireccionesEmpleado());
-            System.out.println("Contacto--------");
-            ContactoEmpleado contactoEmpleado = new ContactoEmpleado();
-            fillContactoEmpleado(contactoEmpleado);
-            empleado.setContactoEmpleado(contactoEmpleado);
-            empleadoService.saveEmpleadoInCache(empleado);
-            stillRequesting = false;
-        }while (stillRequesting);
     }
 
     private void showUserFromCache(){
@@ -98,43 +79,6 @@ public class ProgramaPrincipal {
         } catch (Exception e) {
             System.out.println("No hay un empleado registrado.");
         }
-    }
-
-    private List<DireccionEmpleado> requestDireccionesEmpleado(){
-        List<DireccionEmpleado> empleados = new ArrayList<>();
-        boolean stillRequestingInfo = true;
-        do{
-            DireccionEmpleado direccionEmpleado = new DireccionEmpleado();
-            direccionEmpleado.setCalle(superScanner.nextLine("Calle: "));
-            direccionEmpleado.setNumero(superScanner.nextInt("Numero: ", "Dato invalido"));
-            direccionEmpleado.setColonia(superScanner.nextLine("Colonia: "));
-            direccionEmpleado.setCiudad(superScanner.nextLine("Ciudad: "));
-            direccionEmpleado.setEstado(superScanner.nextLine("Estado: "));
-            empleados.add(direccionEmpleado);
-            char option = superScanner
-                    .nextChar("Ingresar otra direccion más? S/N: ", "Ingresa un valor valido",
-                            's', 'S', 'n', 'N' );
-            if(option == 'n' || option == 'N'){
-                stillRequestingInfo = false;
-            }
-        } while (stillRequestingInfo);
-        return empleados;
-    }
-
-    private void fillContactoEmpleado(ContactoEmpleado contactoEmpleado){
-        boolean stillRequestingContactInfo = true;
-        do{
-            contactoEmpleado.getCorreos().add(superScanner.nextLine("Email: "));
-            char option = superScanner
-                    .nextChar(
-                            "Ingresar otro email? S/N: ",
-                            "Ingresa un valor valido",
-                            's', 'S', 'n', 'N'
-                    );
-            if(option == 'n' || option == 'N'){
-                stillRequestingContactInfo = false;
-            }
-        }while (stillRequestingContactInfo);
     }
 
     private void stopProgram(){

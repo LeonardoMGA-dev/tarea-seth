@@ -1,9 +1,14 @@
 package empleado;
 
+import utils.Capturable;
+import utils.PartialCapturable;
+import utils.SuperScanner;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Empleado {
+public class Empleado implements Capturable<Empleado>, PartialCapturable<Empleado> {
 
     private ContactoEmpleado contactoEmpleado;
     private List<DireccionEmpleado> direccionesEmpleado;
@@ -76,4 +81,43 @@ public class Empleado {
         this.fechaDeNacimiento = fechaDeNacimiento;
         return this;
     }
+
+    @Override
+    public Empleado partialCapture(SuperScanner superScanner) {
+        setNombre(superScanner.nextLine("Nombre: "));
+        setApellidoPaterno(superScanner.nextLine("Apellido Paterno: "));
+        setApellidoMaterno(superScanner.nextLine("Apellido Materno: "));
+        setFechaDeNacimiento(superScanner.nextLine("Fecha de nacimiento: "));
+        return this;
+    }
+
+    @Override
+    public Empleado capture(SuperScanner superScanner) {
+        partialCapture(superScanner);
+        List<DireccionEmpleado> direcciones = requestDireccionesEmpleado(superScanner);
+        setDireccionesEmpleado(direcciones);
+        setContactoEmpleado(new ContactoEmpleado().partialCapture(superScanner));
+        return this;
+    }
+
+
+    private List<DireccionEmpleado> requestDireccionesEmpleado(SuperScanner superScanner){
+        List<DireccionEmpleado> direcciones = new ArrayList<>();
+        boolean stillRequestingInfo = true;
+        do{
+            DireccionEmpleado direccionEmpleado = new DireccionEmpleado().partialCapture(superScanner);
+            direcciones.add(direccionEmpleado);
+            char option = superScanner
+                    .nextChar("Ingresar otra direccion más? S/N: ",
+                            "Ingresa un valor valido",
+                            's', 'S', 'n', 'N'
+                    );
+            if(option == 'n' || option == 'N'){
+                stillRequestingInfo = false;
+            }
+        } while (stillRequestingInfo);
+        return direcciones;
+    }
+
+
 }

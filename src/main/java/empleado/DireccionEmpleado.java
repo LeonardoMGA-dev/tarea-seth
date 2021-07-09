@@ -1,6 +1,10 @@
 package empleado;
 
-public class DireccionEmpleado {
+import utils.Capturable;
+import utils.PartialCapturable;
+import utils.SuperScanner;
+
+public class DireccionEmpleado implements PartialCapturable<DireccionEmpleado> {
     private String calle;
     private int numero;
     private String colonia;
@@ -8,9 +12,7 @@ public class DireccionEmpleado {
     private String estado;
 
 
-    public DireccionEmpleado(){
-
-    }
+    public DireccionEmpleado(){ }
 
     public DireccionEmpleado(String calle, int numero, String colonia, String ciudad, String estado) {
         this.calle = calle;
@@ -58,5 +60,15 @@ public class DireccionEmpleado {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @Override
+    public DireccionEmpleado partialCapture(SuperScanner scanner) {
+        setCalle(scanner.nextLine("Calle: "));
+        setNumero(scanner.nextInt("Numero: ", "Dato invalido"));
+        setColonia(scanner.nextLine("Colonia: "));
+        setCiudad(scanner.nextLine("Ciudad: "));
+        setEstado(scanner.nextLine("Estado: "));
+        return this;
     }
 }
