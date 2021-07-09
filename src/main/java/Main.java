@@ -1,10 +1,11 @@
 import core.Cache;
+import empleado.repository.EmpleadoRepository;
 import empleado.service.EmpleadoService;
 
 public class Main {
 
-    private static final Cache CACHE = new Cache();
-    private static final EmpleadoService EMPLEADO_SERVICE = new EmpleadoService(CACHE);
+    private static final EmpleadoService EMPLEADO_SERVICE =
+            new EmpleadoService(new Cache(), new EmpleadoRepository());
 
     public static void main(String[] args) {
 

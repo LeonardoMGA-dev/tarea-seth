@@ -1,25 +1,44 @@
 package empleado.service;
 
 import core.Cache;
+import empleado.repository.EmpleadoRepository;
 import empleado.Empleado;
 
 public class EmpleadoService {
     private Cache cache;
-    private static final String CACHE_KEY = "empleado";
+    private EmpleadoRepository empleadoRepository;
 
-    public EmpleadoService(Cache cache) {
+    public EmpleadoService(Cache cache, EmpleadoRepository empleadoRepository) {
         this.cache = cache;
+        this.empleadoRepository = empleadoRepository;
     }
 
     public void saveEmpleadoInCache(Empleado empleado){
-        cache.setData(CACHE_KEY, empleado);
+        cache.setEmpleado(empleado);
     }
 
-    public Empleado getEmpleadoFromCache(Cache cache) {
-        return (Empleado) cache.getData(CACHE_KEY);
+    public void saveEmpleadoInDB(Empleado empleado){
+        empleadoRepository.add(empleado);
     }
 
-    public Empleado getEmpleadoFromCache() {
-        return getEmpleadoFromCache(cache);
+    public Empleado getEmpleadoFromCache(String id) {
+        return cache.getEmpleado(id);
     }
+
+    public Empleado getEmpleadoFromDB(String id){
+        return empleadoRepository.getById(id);
+    }
+
+
+    public Empleado getEmpleado(String id) {
+        Empleado empleadoFromCache = getEmpleadoFromCache(id);
+        if(empleadoFromCache != null){
+            return empleadoFromCache;
+        }else {
+            Empleado empleadoFromDB = getEmpleadoFromDB(id);
+            saveEmpleadoInCache(empleadoFromDB);
+            return empleadoFromDB;
+        }
+    }
+
 }

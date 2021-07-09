@@ -16,17 +16,9 @@ public class Empleado implements Capturable<Empleado>, PartialCapturable<Emplead
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String fechaDeNacimiento;
+    private String id;
 
     public Empleado(){ }
-
-    public Empleado(ContactoEmpleado contactoEmpleado, List<DireccionEmpleado> direccionEmpleado, String nombre, String apellidoPaterno, String apellidoMaterno, String fechaDeNacimiento) {
-        this.contactoEmpleado = contactoEmpleado;
-        this.direccionesEmpleado = direccionEmpleado;
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.fechaDeNacimiento = fechaDeNacimiento;
-    }
 
     public ContactoEmpleado getContactoEmpleado() {
         return contactoEmpleado;
@@ -82,8 +74,17 @@ public class Empleado implements Capturable<Empleado>, PartialCapturable<Emplead
         return this;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     @Override
     public Empleado partialCapture(SuperScanner superScanner) {
+        setId(superScanner.nextLine("Id: "));
         setNombre(superScanner.nextLine("Nombre: "));
         setApellidoPaterno(superScanner.nextLine("Apellido Paterno: "));
         setApellidoMaterno(superScanner.nextLine("Apellido Materno: "));
@@ -99,7 +100,6 @@ public class Empleado implements Capturable<Empleado>, PartialCapturable<Emplead
         setContactoEmpleado(new ContactoEmpleado().partialCapture(superScanner));
         return this;
     }
-
 
     private List<DireccionEmpleado> requestDireccionesEmpleado(SuperScanner superScanner){
         List<DireccionEmpleado> direcciones = new ArrayList<>();

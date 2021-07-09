@@ -1,5 +1,3 @@
-import empleado.ContactoEmpleado;
-import empleado.DireccionEmpleado;
 import empleado.Empleado;
 import empleado.service.EmpleadoService;
 import utils.SuperScanner;
@@ -27,7 +25,7 @@ public class ProgramaPrincipal {
             switch (option){
                 case SAVE_USER_OPTION: {
                     Empleado empleado = new Empleado().capture(superScanner);
-                    empleadoService.saveEmpleadoInCache(empleado);
+                    empleadoService.saveEmpleadoInDB(empleado);
                     break;
                 }
                 case GET_USER_OPTION: {
@@ -47,7 +45,7 @@ public class ProgramaPrincipal {
         System.out.println("¿Que quieres hacer?");
         System.out.println("-----------------------------");
         System.out.println("1) Guardar usuario");
-        System.out.println("2) Obtener usuario guardado");
+        System.out.println("2) Consultar usuario");
         System.out.println("3) Cerrar programa");
         System.out.println("----------------------");
         return superScanner.nextInt(
@@ -58,7 +56,12 @@ public class ProgramaPrincipal {
 
     private void showUserFromCache(){
         try {
-            Empleado empleado = empleadoService.getEmpleadoFromCache();
+            String id = superScanner.nextLine("Id de empleado: ");
+            Empleado empleado = empleadoService.getEmpleado(id);
+            if(empleado == null){
+                System.out.println("No se encontró el usuario...");
+                return;
+            }
             System.out.println("Nombre: " + empleado.getNombre());
             System.out.println("Apellido Paterno: " + empleado.getApellidoPaterno());
             System.out.println("Apellido Materno: " + empleado.getApellidoMaterno());
