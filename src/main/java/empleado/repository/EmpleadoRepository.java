@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmpleadoRepository {
+
     private Map<String, Empleado> db;
 
     public EmpleadoRepository(){

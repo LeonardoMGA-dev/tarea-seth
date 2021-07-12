@@ -29,7 +29,6 @@ public class EmpleadoService {
         return empleadoRepository.getById(id);
     }
 
-
     public Empleado getEmpleado(String id) {
         Empleado empleadoFromCache = getEmpleadoFromCache(id);
         if(empleadoFromCache != null){
