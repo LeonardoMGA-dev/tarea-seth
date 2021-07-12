@@ -5,7 +5,7 @@ import empleado.service.EmpleadoService;
 public class Main {
 
     private static final EmpleadoService EMPLEADO_SERVICE =
-            new EmpleadoService(new Cache(), new EmpleadoRepository());
+            new EmpleadoService(Cache.getInstance(), new EmpleadoRepository());
 
     public static void main(String[] args) {
 

@@ -9,7 +9,9 @@ public class Cache {
 
     private Map<String, Empleado> data;
 
-    public Cache(){
+    private static Cache instance;
+
+    private Cache(){
         this.data = new HashMap<>();
     }
 
@@ -19,6 +21,13 @@ public class Cache {
 
     public Empleado getEmpleado(String id){
         return data.get(id);
+    }
+
+    public static Cache getInstance(){
+        if(instance == null ){
+            instance = new Cache();
+        }
+        return instance;
     }
 
 }
